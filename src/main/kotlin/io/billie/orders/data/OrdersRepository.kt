@@ -4,6 +4,7 @@ import io.billie.common.ValidationException
 import io.billie.orders.model.Order
 import io.billie.orders.model.OrderCreationRequest
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -34,7 +35,11 @@ class OrdersRepository {
 
     @Transactional
     fun findOrder(id: UUID): Order? {
-        return jdbcTemplate.queryForObject(orderQuery, ordersMapper(), id)
+        try {
+            return jdbcTemplate.queryForObject(orderQuery, ordersMapper(), id)
+        } catch (ex: EmptyResultDataAccessException) {
+            return null
+        }
     }
 
     @Transactional

@@ -11,9 +11,9 @@ class OrdersService(val db: OrdersRepository) {
 
     /**
      * List all orders for the given merchant (organisation)
-     * @param id unique Billie system identifier
+     * @param orgId unique Billie's organisation identifier
      */
-    fun findOrganisationOrders(id: UUID): List<Order> = db.findOrders(id)
+    fun findOrganisationOrders(orgId: UUID): List<Order> = db.findOrders(orgId)
 
     /**
      * @param orgId id of the merchant that sold the order
