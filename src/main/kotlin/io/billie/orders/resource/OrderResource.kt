@@ -2,7 +2,7 @@ package io.billie.orders.resource
 
 import io.billie.common.ValidationException
 import io.billie.orders.model.Order
-import io.billie.orders.model.OrderCreationRequest
+import io.billie.orders.service.OrderCreationRequest
 import io.billie.orders.service.OrderService
 import io.billie.organisations.viewmodel.Entity
 import org.springframework.http.HttpStatus

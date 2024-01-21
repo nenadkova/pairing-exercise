@@ -3,6 +3,7 @@ package io.billie.orders.resource
 import io.billie.common.ErrorResponse
 import io.billie.orders.model.Shipment
 import io.billie.orders.resource.ApiExamples.SHIPMENT_EXAMPLE
+import io.billie.orders.service.ShipmentCreationRequest
 import io.billie.orders.service.ShipmentService
 import io.billie.organisations.viewmodel.Entity
 import io.swagger.v3.oas.annotations.Operation

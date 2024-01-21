@@ -1,11 +1,11 @@
-package io.billie.orders.resource
+package io.billie.orders.service
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.billie.common.Constants
 import java.util.*
 
 /**
- * Details of a shipment that is sent by merchant
+ * Details of a shipment that is shipped by a merchant
  */
 data class ShipmentCreationRequest (
     /**

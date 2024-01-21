@@ -12,6 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springframework.web.util.WebUtils
 
 
+/**
+ * Common application exception handling mechanism that returns an ErrorResponse object to a failed REST method
+ * @see ErrorResponse
+ */
 @ControllerAdvice(annotations = [RestController::class])
 class CustomEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
@@ -24,7 +28,7 @@ class CustomEntityExceptionHandler : ResponseEntityExceptionHandler() {
         ResponseEntity(ErrorResponse(ex), HttpStatus.NOT_FOUND)
 
     /**
-     * Hanlde internal spring exceptions to return ErrorResponse
+     * Handle internal spring exceptions to return ErrorResponse
      * @see ErrorResponse
      */
     override fun handleExceptionInternal(

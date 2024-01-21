@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
 /**
- * Order sold by a merchamt
+ * Order sold by a merchant
  */
 @Table(schema = "organisations_schema", name = "orders")
 data class Order(
@@ -17,7 +17,7 @@ data class Order(
          */
         val totalItems: Int,
         /**
-         * Time when the order is "placed"
+         * Time when the order was "placed"
          */
         @JsonFormat(pattern = Constants.DATE_JSON_FORMAT)val timePlaced: Date,
         val organisationId: UUID

@@ -8,7 +8,7 @@ import io.billie.functional.orders.ShipmentFixtures.validShipmentOf2
 import io.billie.functional.orders.ShipmentFixtures.validShipmentOf8
 import io.billie.orders.data.ShipmentRepository
 import io.billie.orders.model.Shipment
-import io.billie.orders.resource.ShipmentCreationRequest
+import io.billie.orders.service.ShipmentCreationRequest
 import io.billie.organisations.viewmodel.Entity
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat

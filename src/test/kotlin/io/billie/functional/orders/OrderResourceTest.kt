@@ -8,7 +8,7 @@ import io.billie.functional.orders.OrderCreationRequestFixtures.orgCreationReque
 import io.billie.functional.orders.OrderCreationRequestFixtures.validWithTwoItems
 import io.billie.functional.orders.OrderCreationRequestFixtures.zeroTotalItems
 import io.billie.orders.data.OrderRepository
-import io.billie.orders.model.OrderCreationRequest
+import io.billie.orders.service.OrderCreationRequest
 import io.billie.organisations.viewmodel.Entity
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual.equalTo

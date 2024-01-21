@@ -3,10 +3,12 @@ package io.billie.orders.service
 import io.billie.common.ValidationException
 import io.billie.orders.data.OrderRepository
 import io.billie.orders.model.Order
-import io.billie.orders.model.OrderCreationRequest
 import org.springframework.stereotype.Service
 import java.util.*
 
+/**
+ * Manages Orders
+ */
 @Service
 class OrderService(val db: OrderRepository) {
 
