@@ -14,9 +14,18 @@ To run the tests:
 ```shell
 cd <project_root>
 docker compose up database -d
-gradle flywayMigrate
-gradle clean build
+./gradlew classes
+./gradlew flywayMigrate
+./gradlew clean build
 docs at -> http://localhost:8080/swagger-ui/index.html
 ```
+
+To run the service:
+```shell
+cd <project_root>
+./gradlew bootRun
+docs at -> http://localhost:8080/swagger-ui/index.html
+```
+
 
 

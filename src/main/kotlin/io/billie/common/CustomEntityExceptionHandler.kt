@@ -41,7 +41,7 @@ class CustomEntityExceptionHandler : ResponseEntityExceptionHandler() {
         if (HttpStatus.INTERNAL_SERVER_ERROR == status) {
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST)
         }
-        val errorBody : ErrorResponse = ErrorResponse(ex, false)
+        val errorBody = ErrorResponse(ex, false)
         return ResponseEntity(errorBody, headers, status)
     }
 }
