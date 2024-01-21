@@ -19,7 +19,8 @@ object ShipmentFixtures {
 
     fun validOrder() = """
         {
-             "totalItems": 10
+             "totalItems": 10,
+             "timePlaced": "2023-07-04T12:08:56.235-0500"
          }
     """.trimIndent()
 
@@ -37,15 +38,9 @@ object ShipmentFixtures {
         }
     """
 
-    fun validShipmentWithoutTime() = """
+    fun invalidWithNegativeItems() = """
         {
-             "shippedItems": 2
-         }
-    """.trimIndent()
-
-    fun validShipmentWithTime() = """
-        {
-             "shippedItems": 2,
+             "shippedItems": -2,
              "timeShipped": "2021-01-18T12:08:56.235-0500"
          }
     """.trimIndent()

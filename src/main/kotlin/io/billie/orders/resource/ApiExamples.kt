@@ -15,6 +15,12 @@ internal object ApiExamples {
          }
     """
 
+    const val ORDER_FULFILLED_EXCEPTION_RESPONSE = """
+        {
+             "errorType": "OrderFulfilledException",
+         }
+    """
+
     const val ITEMS_SHIPPED_EXCEED_ORDER_EXCEPTION_RESPONSE = """
         {
              "errorType": "ItemsShippedExceedOrderException",

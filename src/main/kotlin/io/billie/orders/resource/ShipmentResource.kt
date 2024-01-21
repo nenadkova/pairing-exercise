@@ -3,7 +3,7 @@ package io.billie.orders.resource
 import io.billie.common.ErrorResponse
 import io.billie.orders.model.Shipment
 import io.billie.orders.resource.ApiExamples.SHIPMENT_EXAMPLE
-import io.billie.orders.service.ShipmentsService
+import io.billie.orders.service.ShipmentService
 import io.billie.organisations.viewmodel.Entity
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -18,7 +18,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("organisations/{orgId}/orders/{orderId}/shipments", produces = [APPLICATION_JSON_VALUE])
-class ShipmentResource(val service: ShipmentsService) {
+class ShipmentResource(val service: ShipmentService) {
 
     @GetMapping
     @Operation(
@@ -85,7 +85,7 @@ class ShipmentResource(val service: ShipmentsService) {
             description = "Shipment details",
             content = [Content(
                 mediaType = APPLICATION_JSON_VALUE,
-                schema = Schema(implementation = ShipmentCreateRequest::class),
+                schema = Schema(implementation = ShipmentCreationRequest::class),
                 examples = [
                     ExampleObject(
                         summary = "Shipment object details",
@@ -119,7 +119,12 @@ class ShipmentResource(val service: ShipmentsService) {
                             ExampleObject(
                                 description = "Number of items shipped exceeds order items",
                                 value = ApiExamples.ITEMS_SHIPPED_EXCEED_ORDER_EXCEPTION_RESPONSE
-                            )]
+                            ),
+                            ExampleObject(
+                                description = "Posting a shipment for a fulfilled order",
+                                value = ApiExamples.ORDER_FULFILLED_EXCEPTION_RESPONSE
+                            ),
+                        ]
                     )],
             )
         ],
@@ -127,7 +132,7 @@ class ShipmentResource(val service: ShipmentsService) {
     fun createShipment(
         @PathVariable orgId: UUID,
         @PathVariable orderId: UUID,
-        @RequestBody shipmentRequest: ShipmentCreateRequest
+        @RequestBody shipmentRequest: ShipmentCreationRequest
     ): Entity =
         Entity(service.onShipmentSent(orgId, orderId, shipmentRequest))
 

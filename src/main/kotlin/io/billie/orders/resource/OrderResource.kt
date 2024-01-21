@@ -3,7 +3,7 @@ package io.billie.orders.resource
 import io.billie.common.ValidationException
 import io.billie.orders.model.Order
 import io.billie.orders.model.OrderCreationRequest
-import io.billie.orders.service.OrdersService
+import io.billie.orders.service.OrderService
 import io.billie.organisations.viewmodel.Entity
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -14,7 +14,7 @@ import javax.validation.Valid
 
 @RestController
 @RequestMapping("organisations/{orgId}/orders", produces = [MediaType.APPLICATION_JSON_VALUE])
-class OrdersResource (val service: OrdersService) {
+class OrderResource (val service: OrderService) {
 
     @ExceptionHandler(ValidationException::class)
     fun handle(ex: ValidationException): ResponseEntity<String> =  ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)

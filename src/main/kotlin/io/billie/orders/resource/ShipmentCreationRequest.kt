@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Details of a shipment that is sent by merchant
  */
-data class ShipmentCreateRequest (
+data class ShipmentCreationRequest (
     /**
      * Number of items in this shipment
      */

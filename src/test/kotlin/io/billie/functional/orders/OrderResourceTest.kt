@@ -2,12 +2,12 @@ package io.billie.functional.orders
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.billie.functional.orders.OrderCreationRequestFixtures.invalidTimeFormat
+import io.billie.functional.orders.OrderCreationRequestFixtures.invalidWithoutTime
 import io.billie.functional.orders.OrderCreationRequestFixtures.negativeTotalItems
 import io.billie.functional.orders.OrderCreationRequestFixtures.orgCreationRequest
-import io.billie.functional.orders.OrderCreationRequestFixtures.validWithTime
-import io.billie.functional.orders.OrderCreationRequestFixtures.validWithoutTime
+import io.billie.functional.orders.OrderCreationRequestFixtures.validWithTwoItems
 import io.billie.functional.orders.OrderCreationRequestFixtures.zeroTotalItems
-import io.billie.orders.data.OrdersRepository
+import io.billie.orders.data.OrderRepository
 import io.billie.orders.model.OrderCreationRequest
 import io.billie.organisations.viewmodel.Entity
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,7 +29,7 @@ import java.util.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class OrdersResourceTest {
+class OrderResourceTest {
 
     @LocalServerPort
     private val port = 8080
@@ -41,7 +41,7 @@ class OrdersResourceTest {
     private lateinit var mapper: ObjectMapper
 
     @Autowired
-    private lateinit var ordersRepository: OrdersRepository
+    private lateinit var orderRepository: OrderRepository
 
     private lateinit var testOrgId: UUID
 
@@ -92,30 +92,24 @@ class OrdersResourceTest {
     }
 
     @Test
-    fun canStoreOrderWithoutTime() {
-        val result = mockMvc.perform(
-                post(testOrdersUrl).contentType(APPLICATION_JSON).content(validWithoutTime()))
-                .andExpect(status().isOk()).andReturn()
-        val response = mapper.readValue(result.response.contentAsString, Entity::class.java)
-        val readFromDb = ordersRepository.findOrder(response.id)
-
-        val request = mapper.readValue(validWithoutTime(), OrderCreationRequest::class.java)
-        assertThat(readFromDb!!.totalItems, equalTo(request.totalItems))
-        ordersRepository.deleteOrder(response.id)
+    fun cannotStoreOrderWithoutTime() {
+        mockMvc.perform(
+                post(testOrdersUrl).contentType(APPLICATION_JSON).content(invalidWithoutTime()))
+                .andExpect(status().isBadRequest)
     }
 
     @Test
-    fun canStoreOrderWithTime() {
+    fun canStoreOrder() {
         val result = mockMvc.perform(
-                post(testOrdersUrl).contentType(APPLICATION_JSON).content(validWithTime()))
+                post(testOrdersUrl).contentType(APPLICATION_JSON).content(validWithTwoItems()))
                         .andExpect(status().isOk()).andReturn()
         val response = mapper.readValue(result.response.contentAsString, Entity::class.java)
-        val readFromDb = ordersRepository.findOrder(response.id)
+        val readFromDb = orderRepository.findById(response.id).get()
 
-        val request = mapper.readValue(validWithTime(), OrderCreationRequest::class.java)
+        val request = mapper.readValue(validWithTwoItems(), OrderCreationRequest::class.java)
         assertThat(readFromDb!!.totalItems, equalTo(request.totalItems))
-        assertThat(readFromDb.timePlaced, equalTo(request.timePlaced))
-        ordersRepository.deleteOrder(response.id)
+        assertThat(readFromDb.timePlaced.time, equalTo(request.timePlaced.time))
+        orderRepository.deleteById(response.id)
     }
 
 }

@@ -9,5 +9,5 @@ data class OrderCreationRequest(
          * @see Order.totalItems
          */
         val totalItems: Int,
-        @JsonFormat(pattern = Constants.DATE_JSON_FORMAT) val timePlaced: Date?,
+        @JsonFormat(pattern = Constants.DATE_JSON_FORMAT) val timePlaced: Date
 )

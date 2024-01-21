@@ -20,13 +20,13 @@ object OrderCreationRequestFixtures {
          }
     """.trimIndent()
 
-    fun validWithoutTime() = """
+    fun invalidWithoutTime() = """
         {
              "totalItems": 3
          }
     """.trimIndent()
 
-    fun validWithTime() = """
+    fun validWithTwoItems() = """
         {
             "totalItems": 2,
             "timePlaced": "2023-07-04T12:08:56.235-0500"

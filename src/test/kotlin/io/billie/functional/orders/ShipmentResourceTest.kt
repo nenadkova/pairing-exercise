@@ -2,13 +2,13 @@ package io.billie.functional.orders
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.billie.functional.orders.ShipmentFixtures.invalidWithNegativeItems
 import io.billie.functional.orders.ShipmentFixtures.orgCreationRequest
 import io.billie.functional.orders.ShipmentFixtures.validShipmentOf2
 import io.billie.functional.orders.ShipmentFixtures.validShipmentOf8
-import io.billie.functional.orders.ShipmentFixtures.validShipmentWithTime
 import io.billie.orders.data.ShipmentRepository
 import io.billie.orders.model.Shipment
-import io.billie.orders.resource.ShipmentCreateRequest
+import io.billie.orders.resource.ShipmentCreationRequest
 import io.billie.organisations.viewmodel.Entity
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
@@ -70,16 +69,16 @@ class ShipmentResourceTest {
     }
 
     @Test
-    fun canStoreShipmentWithTime() {
+    fun canStoreShipment() {
         val result = mockMvc.perform(
-            post(testShipmentsUrl).contentType(APPLICATION_JSON).content(validShipmentWithTime())
+            post(testShipmentsUrl).contentType(APPLICATION_JSON).content(validShipmentOf2())
         ).andExpect(status().isCreated).andReturn()
         val response = mapper.readValue(result.response.contentAsString, Entity::class.java)
-        val shipmentFromDb = shipmentDb.findById(response.id)
+        val shipmentFromDb = shipmentDb.findById(response.id).get()
 
-        val request = mapper.readValue(validShipmentWithTime(), ShipmentCreateRequest::class.java)
-        assertThat(shipmentFromDb.get().shippedItems, equalTo(request.shippedItems))
-        assertThat(shipmentFromDb.get().timeShipped.time, equalTo(request.timeShipped.time))
+        val request = mapper.readValue(validShipmentOf2(), ShipmentCreationRequest::class.java)
+        assertThat(shipmentFromDb.shippedItems, equalTo(request.shippedItems))
+        assertThat(shipmentFromDb.timeShipped.time, equalTo(request.timeShipped.time))
         shipmentDb.deleteById(response.id)
     }
 
@@ -91,12 +90,23 @@ class ShipmentResourceTest {
     }
 
     @Test
+    fun cannotStoreWithNegativeItems() {
+        mockMvc.perform(
+            post(testShipmentsUrl).contentType(APPLICATION_JSON).content(invalidWithNegativeItems())
+        )
+            .andExpect(status().isBadRequest)
+            .andExpect(jsonPath("$.errorType").value("ValidationException"))
+    }
+
+    @Test
     fun cannotStoreWhenNoOrder() {
         val fakeOrderId = UUID(2132122, 212121)
         mockMvc.perform(
             post("/organisations/${testOrgId}/orders/${fakeOrderId}/shipments").contentType(APPLICATION_JSON)
-                .content(validShipmentWithTime())
+                .content(validShipmentOf2())
         ).andExpect(status().isNotFound)
+            .andExpect(jsonPath("$.errorType").value("EntityNotFoundException"))
+
     }
 
     @Test
@@ -104,8 +114,9 @@ class ShipmentResourceTest {
         val fakeOrgId = UUID(2132122, 212121)
         mockMvc.perform(
             post("/organisations/${fakeOrgId}/orders/${testOrderId}/shipments").contentType(APPLICATION_JSON)
-                .content(validShipmentWithTime())
+                .content(validShipmentOf2())
         ).andExpect(status().isNotFound)
+            .andExpect(jsonPath("$.errorType").value("EntityNotFoundException"))
     }
 
     @Test
@@ -117,8 +128,8 @@ class ShipmentResourceTest {
         mockMvc.perform(
             post(testShipmentsUrl).contentType(APPLICATION_JSON).content(validShipmentOf8())
         ).andExpect(status().isBadRequest)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.errorType").value("ItemsShippedExceedOrderException"));
+            .andExpect(content().contentType(APPLICATION_JSON))
+            .andExpect(jsonPath("$.errorType").value("ItemsShippedExceedOrderException"))
     }
 
     @Test
@@ -133,8 +144,8 @@ class ShipmentResourceTest {
         mockMvc.perform(
             post(testShipmentsUrl).contentType(APPLICATION_JSON).content(validShipmentOf2())
         ).andExpect(status().isBadRequest)
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.errorType").value("OrderFulfilledException"));
+            .andExpect(content().contentType(APPLICATION_JSON))
+            .andExpect(jsonPath("$.errorType").value("OrderFulfilledException"))
     }
 
     @Test
