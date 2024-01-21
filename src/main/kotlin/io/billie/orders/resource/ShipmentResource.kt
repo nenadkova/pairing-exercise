@@ -69,8 +69,8 @@ class ShipmentResource(val service: ShipmentService) {
     @Operation(
         summary = "Send a shipment notification",
         description = """
-             Notify Billie of an order shipment that has been sent. There could be multiple shipments for 
-             an order, however total number of shipped items cannot exceed number of items in the order. 
+             Notify Billie of a shipment that has been sent to the buyer. There could be multiple shipments for 
+             an order, however total number of shipped items cannot exceed number of items in the order.  
             """,
         parameters = [
             Parameter(
