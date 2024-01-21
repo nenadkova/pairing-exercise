@@ -56,7 +56,7 @@ class ShipmentResourceTest {
             post("/organisations").contentType(APPLICATION_JSON).content(orgCreationRequest())
         ).andExpect(status().isOk).andReturn()
 
-        var response = mapper.readValue(result.response.contentAsString, Entity::class.java)
+        var response: Entity = mapper.readValue(result.response.contentAsString, Entity::class.java)
         testOrgId = response.id
         val testOrdersUrl = "/organisations/${testOrgId}/orders"
 

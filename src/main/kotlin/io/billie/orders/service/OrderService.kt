@@ -18,7 +18,7 @@ class OrderService(val db: OrderRepository) {
 
     /**
      * @param orgId id of the merchant that sold the order
-     * @param order details of the order
+     * @param orderRequest details of the order
      * @throws ValidationException in case order request is invalid
      */
     fun createOrder(orgId: UUID, orderRequest: OrderCreationRequest): UUID {

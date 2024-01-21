@@ -107,7 +107,7 @@ class OrderResourceTest {
         val readFromDb = orderRepository.findById(response.id).get()
 
         val request = mapper.readValue(validWithTwoItems(), OrderCreationRequest::class.java)
-        assertThat(readFromDb!!.totalItems, equalTo(request.totalItems))
+        assertThat(readFromDb.totalItems, equalTo(request.totalItems))
         assertThat(readFromDb.timePlaced.time, equalTo(request.timePlaced.time))
         orderRepository.deleteById(response.id)
     }
